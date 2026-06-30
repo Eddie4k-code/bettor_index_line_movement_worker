@@ -28,4 +28,34 @@ class OddsApiPropsHistoryRepository(OddsApiPropsHistoryRepositoryInterface):
             raise e
         
         return [OddsApiPropsHistorySchema.from_orm(record) for record in records]
-    
+
+    def get_unanalyzed(self, batch_size: int) -> List[OddsApiPropsHistorySchema]:
+        try:
+            records = (
+                self.db_session.query(OddsAPIPropHistory)
+                .filter(OddsAPIPropHistory.analyzed == False)
+                .order_by(OddsAPIPropHistory.change_time.asc())
+                .limit(batch_size)
+                .all()
+            )
+        except Exception as e:
+            logger.error(f"Error fetching unanalyzed records: {e}")
+            raise e
+
+        return [OddsApiPropsHistorySchema.from_orm(record) for record in records]
+
+    def mark_analyzed(self, ids: List[int]) -> None:
+        if not ids:
+            return
+        try:
+            (
+                self.db_session.query(OddsAPIPropHistory)
+                .filter(OddsAPIPropHistory.id.in_(ids))
+                .update({"analyzed": True}, synchronize_session=False)
+            )
+            self.db_session.commit()
+        except Exception as e:
+            self.db_session.rollback()
+            logger.error(f"Error marking records as analyzed: {e}")
+            raise
+
