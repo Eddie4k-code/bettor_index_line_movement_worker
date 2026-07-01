@@ -1,0 +1,44 @@
+.git
+.gitignore
+
+# Local env and secrets
+.env
+.env.*
+*.env
+
+# Virtual environments
+.venv
+venv/
+env/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+*.egg-info/
+dist/
+build/
+
+# Tests (not needed in runtime image)
+tests/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+
+# Logs and local databases
+*.log
+*.db
+
+# Docs and plans
+*.md

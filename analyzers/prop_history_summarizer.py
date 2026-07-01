@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from typing import Callable, Iterable, List, Tuple
 
 from config.top_movers import TopMoversConfig
+from utils.utc import utc_now
 from interfaces.prop_history_summarizer_interface import PropHistorySummarizerInterface
 from interfaces.prop_movement_summary_interface import PropMovementSummaryRepositoryInterface
 from schemas.odds_api_props_history import OddsApiPropsHistorySchema
@@ -20,7 +21,7 @@ class PropHistorySummarizer(PropHistorySummarizerInterface):
     ):
         self.summary_repo = summary_repo
         self.config = config or TopMoversConfig.from_env()
-        self.now_fn = now_fn or datetime.utcnow
+        self.now_fn = now_fn or utc_now
 
     def process_batch(
         self, rows: List[OddsApiPropsHistorySchema]

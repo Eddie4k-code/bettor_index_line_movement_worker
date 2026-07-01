@@ -5,6 +5,7 @@ from typing import Callable, List
 from sqlalchemy.orm import Session
 
 from config.top_movers import TopMoversConfig
+from utils.utc import utc_now
 from db.models.prop_movement_summary import PropMovementSummary
 from interfaces.prop_movement_summary_interface import (
     PropMovementSummaryRepositoryInterface,
@@ -24,7 +25,7 @@ class PropMovementSummaryRepository(PropMovementSummaryRepositoryInterface):
     ):
         self.db_session = db_session
         self.config = config or TopMoversConfig.from_env()
-        self.now_fn = now_fn or datetime.utcnow
+        self.now_fn = now_fn or utc_now
 
     def upsert_many(self, summaries: List[PropMovementSummarySchema]) -> None:
         try:
